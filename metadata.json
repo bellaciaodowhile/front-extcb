@@ -1,0 +1,6 @@
+{
+  "name": "Leaderboard Pro - Extensión Chrome",
+  "description": "Extensión interactiva de Chrome y tablero de clasificaciones estilo juego con podio animado, sonidos sutiles, parser HTML en vivo y persistencia con Chrome Storage API.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

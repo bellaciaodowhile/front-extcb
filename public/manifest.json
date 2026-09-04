@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Leaderboard Pro - Clasificación en Vivo",
+  "version": "1.0.0",
+  "description": "Tablero interactivo de clasificación en tiempo real estilo juego con podio animado, sonidos y actualización cada 2 segundos.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Leaderboard Pro"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
