@@ -250,7 +250,11 @@ export const FooterControlsDrawer: React.FC<FooterControlsDrawerProps> = ({
                 : `Mostrar Ganadores (Revelar desde puesto #${ceremonyStartRank})`
             }
           >
-            <Trophy className="w-4 h-4 fill-slate-950 stroke-slate-950" />
+            {isCeremonyMode ? (
+              <X className="w-4 h-4 fill-slate-950 stroke-slate-950" />
+            ) : (
+              <Trophy className="w-4 h-4 fill-slate-950 stroke-slate-950" />
+            )}
 
             {/* Rank badge on the button */}
             <span className="absolute -top-1.5 -right-1.5 px-1 min-w-[16px] h-4 rounded-full bg-slate-950 text-amber-300 text-[10px] font-black flex items-center justify-center border border-amber-300/80 shadow-xs font-mono">

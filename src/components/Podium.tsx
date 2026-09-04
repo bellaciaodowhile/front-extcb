@@ -61,34 +61,50 @@ export const Podium: React.FC<PodiumProps> = ({
   // Confetti helper
   const triggerConfetti = (isGrand: boolean = false) => {
     if (typeof window === 'undefined') return;
+    import('canvas-confetti').then((confetti) => {
+      confetti.default({
+        particleCount: isGrand ? 200 : 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: isGrand ? ['#FFD700', '#FFA500', '#FF4500', '#FFFFFF'] : ['#9370DB', '#8A2BE2', '#7B68EE'],
+        disableForReducedMotion: true
+      });
+    });
   };
 
   // Sound effects, confetti & Grandote Spotlight on ceremonyStep transition
   useEffect(() => {
     if (!isCeremonyMode) return;
     
+    // Si ya estamos mostrando el primer lugar (rank 1), evitamos que se recalcule o se oculte solo
+    if (spotlightData && spotlightData.rank === 1 && isSpotlightVisible) {
+      return;
+    }
+
     const currentRevealedRank = ceremonyStep > 0 && ceremonyStep <= effectiveStartRank
       ? effectiveStartRank - ceremonyStep + 1
       : null;
 
-    // Only update spotlight if rank actually changed
+    // Solo actualiza si el rango cambió y es válido
     if (currentRevealedRank && (!spotlightData || spotlightData.rank !== currentRevealedRank)) {
       const participant = topParticipants[currentRevealedRank - 1];
       if (participant) {
-        console.log(`CurrentReveal: ${currentRevealedRank} - Participant: ${participant}`)
-        setSpotlightData({ participant, rank: currentRevealedRank });
-        setIsSpotlightVisible(true);
+        console.log(`CurrentReveal: ${currentRevealedRank} - Participant: ${participant}`);
 
         if (currentRevealedRank === 1) {
           soundEffects.playGrandVictory();
+          setSpotlightData({ participant, rank: currentRevealedRank });
+          setIsSpotlightVisible(true);
         } else {
           soundEffects.playFanfareStep(currentRevealedRank);
+          setSpotlightData({ participant, rank: currentRevealedRank });
+          setIsSpotlightVisible(true);        
         }
       }
-    } else if (!currentRevealedRank && isSpotlightVisible) {
+    } else if (!currentRevealedRank && isSpotlightVisible && (!spotlightData || spotlightData.rank !== 1)) {
       setIsSpotlightVisible(false);
     }
-  }, [ceremonyStep, isCeremonyMode, effectiveStartRank, topParticipants]);
+  }, [ceremonyStep, isCeremonyMode, effectiveStartRank, topParticipants, spotlightData, isSpotlightVisible]);
 
   // Handle dismissing spotlight manually to immediately see position in list
   const handleDismissSpotlight = () => {
@@ -102,6 +118,7 @@ export const Podium: React.FC<PodiumProps> = ({
     setIsPreparingFirst(true);
     setCountdownNum(3);
     soundEffects.playDrumrollSuspense(2.6);
+    console.log('Mostrando campeon')
 
     // Preparation countdown beats
     setTimeout(() => {
@@ -315,6 +332,7 @@ export const Podium: React.FC<PodiumProps> = ({
                     {spotlightData.rank - 1 === 1 ? (
                       <button
                         onClick={() => {
+                          triggerConfetti(true);
                           setIsSpotlightVisible(false);
                           handleRevealFirstPlace();
                         }}
@@ -350,16 +368,6 @@ export const Podium: React.FC<PodiumProps> = ({
                     transition={{ delay: 0.3 }}
                     className="mt-6 flex flex-wrap items-center justify-center gap-3"
                   >
-                    <button
-                      onClick={() => {
-                        setIsSpotlightVisible(false);
-                        onNextCeremonyStep?.();
-                      }}
-                      className="px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 hover:from-amber-300 hover:to-yellow-200 text-slate-950 font-black text-sm sm:text-base shadow-[0_6px_24px_rgba(245,158,11,0.5)] flex items-center gap-2 cursor-pointer active:scale-95 transition-all"
-                    >
-                      <Trophy className="w-5 h-5 fill-slate-950 stroke-slate-950" />
-                      <span>Ver podio completo con ganadores</span>
-                    </button>
                     <button
                       onClick={() => {}}
                       className="px-5 py-2.5 rounded-full bg-white/20 hover:bg-white/30 text-white font-bold text-xs sm:text-sm backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer active:scale-95 border border-white/30 shadow-lg"
