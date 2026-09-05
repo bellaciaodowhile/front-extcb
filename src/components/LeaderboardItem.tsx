@@ -110,7 +110,7 @@ export const LeaderboardItem: React.FC<LeaderboardItemProps> = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center text-[#0f172a] px-2.5 py-0.3 font-extrabold font-['Fredoka',sans-serif]">
+        <div className="flex flex-col items-center text-[#0f172a] px-2.5 py-0.3 font-extrabold font-['Fredoka',sans-serif] ml-3">
           <span className="text-4xl">{participant.puntos}</span>
           <span className="text-md"> PTS</span>
         </div>
