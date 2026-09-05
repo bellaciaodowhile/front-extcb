@@ -25,7 +25,7 @@ import {
 import { soundEffects } from './utils/audio';
 import { storageAdapter, isChromeExtension } from './utils/storage';
 import { fetchParticipants } from './utils/api';
-
+import JSZip from 'jszip';
 const FAKE_NAMES = [
   'Valentina Rojas',
   'Mateo Morales',
@@ -650,7 +650,7 @@ export default function App() {
   };
 
   // Download Chrome Extension Files
-  const handleDownloadExtension = () => {
+  /*const handleDownloadExtension = () => {
     const readmeContent = `=== LEADERBOARD PRO - EXTENSIÓN CHROME ===
 Para instalar esta extensión en Google Chrome:
 1. Abre Google Chrome y ve a chrome://extensions/
@@ -667,7 +667,63 @@ Para instalar esta extensión en Google Chrome:
     a.click();
     URL.revokeObjectURL(url);
   };
+*/
 
+
+
+const handleDownloadExtension = async () => {
+  try {
+    const zip = new JSZip();
+    
+    // Lista los archivos que componen tu extensión dentro de public/extcb/
+    // (Ajusta o añade aquí los nombres reales de los archivos que tengas en esa carpeta)
+    const filesToZip = [
+      'manifest.json',
+      'content.js'
+    ];
+
+    // Descargamos cada archivo desde la carpeta pública de forma paralela
+    const fetchPromises = filesToZip.map(async (filename) => {
+      try {
+        const response = await fetch(`/extcb/${filename}`);
+        if (!response.ok) return; // Si algún archivo opcional no existe, lo ignora
+        
+        // Dependiendo del archivo, puede ser texto o binario (como imágenes o iconos)
+        const isBinary = filename.endsWith('.png') || filename.endsWith('.jpg') || filename.endsWith('.ico');
+        const content = isBinary ? await response.blob() : await response.text();
+        
+        zip.file(filename, content);
+      } catch (err) {
+        console.warn(`No se pudo cargar el archivo ${filename} para el ZIP:`, err);
+      }
+    });
+
+    await Promise.all(fetchPromises);
+
+    // Añadimos también un archivo README opcional dentro del ZIP con las instrucciones
+    const readmeContent = `=== LEADERBOARD PRO - EXTENSIÓN CHROME ===
+Para instalar esta extensión en Google Chrome:
+1. Abre Google Chrome y ve a chrome://extensions/
+2. Activa el "Modo de desarrollador" en la esquina superior derecha.
+3. Haz clic en "Cargar descomprimida" (Load unpacked).
+4. Selecciona esta carpeta descomprimida.
+5. ¡Listo! La extensión inspeccionará automáticamente cada 2s la tabla #table-5-column o <p id="GridResultados">.
+`;
+    zip.file('Instrucciones.txt', readmeContent);
+
+    // Generamos el archivo ZIP y disparamos la descarga
+    const content = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(content);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'LeaderboardPro_Extension.zip';
+    a.click();
+    URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error('Error al generar el archivo ZIP de la extensión:', error);
+  }
+};
   // Extract unique sedes list
   const availableSedes = useMemo(() => {
     const set = new Set<string>();

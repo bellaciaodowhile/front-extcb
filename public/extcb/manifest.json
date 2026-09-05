@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Extractor en Tiempo Real - Conexión Bíblica",
+  "version": "1.0",
+  "description": "Extrae resultados y métricas del DOM cada 2 segundos y los envía a una API.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://app1.conexionbiblica.net/*",
+    "https://app2.conexionbiblica.net/*",
+    "https://app3.conexionbiblica.net/*",
+    "https://app4.conexionbiblica.net/*",
+    "https://app5.conexionbiblica.net/*",
+    "https://app6.conexionbiblica.net/*",
+    "https://app7.conexionbiblica.net/*",
+    "https://app8.conexionbiblica.net/*",
+    "https://app9.conexionbiblica.net/*",
+    "https://app10.conexionbiblica.net/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app1.conexionbiblica.net/*", 
+        "https://app2.conexionbiblica.net/*",
+        "https://app3.conexionbiblica.net/*",
+        "https://app4.conexionbiblica.net/*",
+        "https://app5.conexionbiblica.net/*",
+        "https://app6.conexionbiblica.net/*",
+        "https://app7.conexionbiblica.net/*",
+        "https://app8.conexionbiblica.net/*",
+        "https://app9.conexionbiblica.net/*",
+        "https://app10.conexionbiblica.net/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

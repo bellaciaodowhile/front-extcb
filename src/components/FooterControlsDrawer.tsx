@@ -753,15 +753,6 @@ export const FooterControlsDrawer: React.FC<FooterControlsDrawerProps> = ({
               {/* Utility actions */}
               <div className="flex items-center gap-2">
                 <button
-                  onClick={onOpenHtmlModal}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1 transition-colors cursor-pointer"
-                  title="Pegar código HTML de tu plataforma"
-                >
-                  <Code className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Pegar HTML</span>
-                </button>
-
-                <button
                   onClick={onToggleSound}
                   className={`p-1.5 rounded-lg border transition-colors cursor-pointer ${
                     soundEnabled
