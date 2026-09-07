@@ -30,6 +30,7 @@ import {
   Wrench,
   Hourglass,
   RefreshCw,
+  Heart,
 } from 'lucide-react';
 import { LeaderboardViewMode, QuizMeta } from '../types';
 
@@ -116,6 +117,7 @@ export const FooterControlsDrawer: React.FC<FooterControlsDrawerProps> = ({
   const [isViewSpeedDialOpen, setIsViewSpeedDialOpen] = useState<boolean>(false);
   const [isCeremonyConfigOpen, setIsCeremonyConfigOpen] = useState<boolean>(false);
   const [areBubblesHidden, setAreBubblesHidden] = useState<boolean>(false);
+  const [showContact, setShowContact] = useState<boolean>(false);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 flex flex-col items-center pointer-events-none">
@@ -522,7 +524,6 @@ export const FooterControlsDrawer: React.FC<FooterControlsDrawerProps> = ({
 
             {/* Quick Action Buttons Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-7 gap-2 mb-3">
-              {/* 🏆 Winners Ceremony on Podium Button */}
               <button
                 onClick={() => {
                   onToggleCeremony();
@@ -796,6 +797,53 @@ export const FooterControlsDrawer: React.FC<FooterControlsDrawerProps> = ({
                   <span>Descargar</span>
                 </button>
               </div>
+            </div>
+
+            {/* Developer Credits Footer - Full Width at Bottom */}
+            <div className="pt-4 mt-4 border-t border-slate-800/60 w-full text-center">
+              <p className="text-slate-300 text-sm font-medium flex items-center justify-center gap-2 mb-2">
+                Desarrollado con ❤️ por
+                <button
+                  onClick={() => setShowContact(!showContact)}
+                  className="text-red-500 hover:text-red-400 font-black text-base transition-colors underline decoration-2 decoration-red-500/50 underline-offset-4 hover:decoration-red-500 cursor-pointer"
+                >
+                   codezardi
+                </button>
+              </p>
+
+              {showContact && (
+                <motion.div
+                  initial={{ opacity: 0, y: 3 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -3 }}
+                  className="flex flex-col items-center gap-2 w-full bg-slate-900/90 p-4 rounded-lg border border-indigo-500/40 shadow-xl max-w-2xl mx-auto"
+                >
+                  <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800 w-full">
+                    <div className="w-8 h-8 rounded-full bg-cyan-900/30 flex items-center justify-center text-cyan-400">
+                      <span className="text-sm">✉️</span>
+                    </div>
+                    <a
+                      href="mailto:codezardi@example.com"
+                      className="text-xs text-white font-medium flex-1 truncate"
+                    >
+                      codezardi@example.com
+                    </a>
+                  </div>
+                  <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800 w-full">
+                    <div className="w-8 h-8 rounded-full bg-green-900/30 flex items-center justify-center text-green-400">
+                      <span className="text-sm">📱</span>
+                    </div>
+                    <a
+                      href="https://wa.me/584120000000"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-white font-medium flex-1 truncate"
+                    >
+                      +58 412-000-0000
+                    </a>
+                  </div>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}

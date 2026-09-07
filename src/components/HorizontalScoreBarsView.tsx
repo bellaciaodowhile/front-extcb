@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Clock,
@@ -14,6 +14,8 @@ import {
   Moon,
   TrendingDown,
   Sparkles,
+  Pause,
+  Play,
 } from 'lucide-react';
 import { Participant } from '../types';
 
@@ -169,6 +171,10 @@ export const HorizontalScoreBarsView: React.FC<HorizontalScoreBarsViewProps> = (
   // Active participant selected for the large Hero Card on top
   const [activeParticipantIndex, setActiveParticipantIndex] = useState<number>(0);
 
+  // Auto-navigate state
+  const [isAutoNavigating, setIsAutoNavigating] = useState<boolean>(true);
+  const autoNavigateIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
   // Toggle to show/hide the location/zone watermark in big format on cards
   const [showBigZoneWatermark, setShowBigZoneWatermark] = useState<boolean>(true);
 
@@ -186,12 +192,34 @@ export const HorizontalScoreBarsView: React.FC<HorizontalScoreBarsViewProps> = (
   const safeIndex = Math.min(Math.max(0, activeParticipantIndex), Math.max(0, participants.length - 1));
   const activeParticipant = participants[safeIndex] || participants[0];
 
+  // Auto-navigate effect
+  useEffect(() => {
+    if (isAutoNavigating && participants.length > 1) {
+      autoNavigateIntervalRef.current = setInterval(() => {
+        setActiveParticipantIndex((prev) => (prev < participants.length - 1 ? prev + 1 : 0));
+      }, 3000);
+    } else {
+      if (autoNavigateIntervalRef.current) {
+        clearInterval(autoNavigateIntervalRef.current);
+        autoNavigateIntervalRef.current = null;
+      }
+    }
+
+    return () => {
+      if (autoNavigateIntervalRef.current) {
+        clearInterval(autoNavigateIntervalRef.current);
+      }
+    };
+  }, [isAutoNavigating, participants.length]);
+
   // Navigation handlers
   const handlePrev = () => {
+    setIsAutoNavigating(false);
     setActiveParticipantIndex((prev) => (prev > 0 ? prev - 1 : participants.length - 1));
   };
 
   const handleNext = () => {
+    setIsAutoNavigating(false);
     setActiveParticipantIndex((prev) => (prev < participants.length - 1 ? prev + 1 : 0));
   };
 
@@ -362,6 +390,23 @@ export const HorizontalScoreBarsView: React.FC<HorizontalScoreBarsViewProps> = (
                 aria-label="Participante anterior"
               >
                 <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <button
+                onClick={() => setIsAutoNavigating(!isAutoNavigating)}
+                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all cursor-pointer active:scale-90 ${
+                  isAutoNavigating
+                    ? 'bg-amber-400 text-slate-950 shadow-xs'
+                    : 'bg-slate-800 text-slate-400 border border-slate-700'
+                }`}
+                title={isAutoNavigating ? 'Pausar auto-navegación' : 'Reanudar auto-navegación'}
+                aria-label={isAutoNavigating ? 'Pausar auto-navegación' : 'Reanudar auto-navegación'}
+              >
+                {isAutoNavigating ? (
+                  <Pause className="w-3.5 h-3.5" />
+                ) : (
+                  <Play className="w-3.5 h-3.5" />
+                )}
               </button>
 
               <span className="font-mono text-xs font-bold px-2 text-slate-400">

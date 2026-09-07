@@ -880,17 +880,10 @@ Para instalar esta extensión en Google Chrome:
               className="w-full flex items-center justify-center"
             >
               {viewMode === 'split' ? (
-                /* Two-Column Centered Split Layout */
-                <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-14 py-2">
-                  {/* Left Column: Podium perfectly centered */}
-                  {topThree.length > 0 && (
-                    <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
-                      <Podium topParticipants={topThree} />
-                    </div>
-                  )}
-
-                  {/* Right Column: Remaining Contestants List (#4 onwards) */}
-                  <div className="w-full lg:w-1/2 max-w-xl flex flex-col justify-center">
+                /* Two-Column Split Layout: Left (scrollable #4+), Right (fixed 1st-3rd) */
+                <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-stretch gap-6 py-4">
+                  {/* Left Column: Remaining Contestants List (#4 onwards) - Scrollable */}
+                  <div className="w-full lg:w-1/2 max-w-2xl flex flex-col h-[60vh] lg:h-[80vh]">
                     {remainingParticipants.length > 0 && (
                       <div className="flex items-center justify-between px-2 mb-2">
                         <div className="flex items-center gap-2">
@@ -905,9 +898,9 @@ Para instalar esta extensión en Google Chrome:
                       </div>
                     )}
 
-                    {/* Cards List */}
+                    {/* Scrollable Cards List */}
                     {remainingParticipants.length > 0 ? (
-                      <motion.div layout className="space-y-2">
+                      <motion.div layout className="space-y-2 overflow-y-auto pr-2 custom-scrollbar h-full">
                         <AnimatePresence>
                           {remainingParticipants.map((p) => (
                             <LeaderboardItem key={p.id} participant={p} />
@@ -926,21 +919,30 @@ Para instalar esta extensión en Google Chrome:
                       </div>
                     ) : null}
                   </div>
+
+                  {/* Right Column: Podium 1st-3rd - Fixed */}
+                  <div className="w-full lg:w-1/2 flex flex-col items-center justify-center">
+                    {topThree.length > 0 && (
+                      <div className="w-full flex flex-col items-center">
+                        <Podium topParticipants={topThree} isSplitMode={true} />
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : (
                 /* Classic Vertical Layout */
-                <div className="w-full max-w-4xl mx-auto flex flex-col">
+                <div className="w-full max-w-4xl mx-auto flex flex-col items-center">
                   {/* Top 3 3D Podium matching reference design */}
                   {topThree.length > 0 && (
-                    <div className="w-full">
+                    <div className="w-full mb-4">
                       <Podium topParticipants={topThree} />
                     </div>
                   )}
 
-                  {/* Remaining Contestants List (#4 onwards) */}
-                  <div className="w-full mt-2 sm:mt-3 flex-1 flex flex-col">
+                  {/* Remaining Contestants List (#4 onwards) - centered */}
+                  <div className="w-full flex-1 flex flex-col items-center">
                     {remainingParticipants.length > 0 && (
-                      <div className="flex items-center justify-between px-2 mb-1.5">
+                      <div className="flex items-center justify-between px-2 mb-1.5 w-full">
                         <div className="flex items-center gap-2">
                           <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-white drop-shadow font-['Fredoka',sans-serif] flex items-center gap-1.5">
                             <Users className="w-3.5 h-3.5 text-white" />
@@ -955,7 +957,7 @@ Para instalar esta extensión en Google Chrome:
 
                     {/* Cards List without dark borders and non-clickable */}
                     {remainingParticipants.length > 0 ? (
-                      <motion.div layout className="space-y-1.5 sm:space-y-2">
+                      <motion.div layout className="space-y-1.5 sm:space-y-2 w-full max-w-2xl mx-auto">
                         <AnimatePresence>
                           {remainingParticipants.map((p) => (
                             <LeaderboardItem key={p.id} participant={p} />

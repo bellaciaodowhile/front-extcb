@@ -8,6 +8,7 @@ import { formatLocationZone } from './HorizontalScoreBarsView';
 interface PodiumProps {
   topParticipants: Participant[];
   isCeremonyMode?: boolean;
+  isSplitMode?: boolean;
   ceremonyStep?: number;
   ceremonyStartRank?: number; // Starting rank (e.g. 5, 4, 3)
   onNextCeremonyStep?: () => void;
@@ -37,6 +38,7 @@ const formatNameParts = (fullName: string) => {
 export const Podium: React.FC<PodiumProps> = ({
   topParticipants,
   isCeremonyMode = false,
+  isSplitMode = false,
   ceremonyStep = 3,
   ceremonyStartRank = 3,
   onNextCeremonyStep,
@@ -146,6 +148,31 @@ export const Podium: React.FC<PodiumProps> = ({
   };
 
   if (!first) return null;
+
+  // Height classes for pillars based on mode
+  const get_heightClass = (rank: number) => {
+    if (isCeremonyMode) {
+      switch (rank) {
+        case 1: return 'h-36 sm:h-44 md:h-52';
+        case 2: return 'h-28 sm:h-34 md:h-40';
+        case 3: return 'h-22 sm:h-28 md:h-32';
+      }
+    }
+    // Classic or Split mode
+    if (isSplitMode) {
+      switch (rank) {
+        case 1: return 'h-48 sm:h-64 md:h-80';
+        case 2: return 'h-44 sm:h-56 md:h-72';
+        case 3: return 'h-40 sm:h-48 md:h-64';
+      }
+    }
+    // Standard mode
+    switch (rank) {
+      case 1: return 'h-48 sm:h-60 md:h-70';
+      case 2: return 'h-36 sm:h-44 md:h-52';
+      case 3: return 'h-26 sm:h-34 md:h-40';
+    }
+  };
 
   // Reveal calculation based on effectiveStartRank
   // Note: When ceremonyStep > effectiveStartRank, all positions are revealed
@@ -458,7 +485,7 @@ export const Podium: React.FC<PodiumProps> = ({
             key={`pillar-2`}
             participant={second}
             rank={2}
-            heightClass={isCeremonyMode ? 'h-28 sm:h-34 md:h-40' : 'h-36 sm:h-44 md:h-52'}
+            heightClass={get_heightClass(2)}
             pillarGradient="bg-gradient-to-b from-[#8f9df8] via-[#7d8cf5] to-[#6d7df0]"
             topCapGradient="bg-[#a5b2fc]"
             sideShadow="shadow-[0_12px_24px_rgba(79,70,229,0.28)]"
@@ -468,7 +495,7 @@ export const Podium: React.FC<PodiumProps> = ({
             isHighlight={justRevealedRank === 2}
           />
         ) : (
-          <div className="w-24 sm:w-32 md:w-40 h-28 opacity-25 flex items-center justify-center text-xs text-white">
+          <div className={`w-24 sm:w-32 md:w-40 ${isSplitMode ? 'h-44 sm:h-56 md:h-72' : 'h-28'} opacity-25 flex items-center justify-center text-xs text-white`}>
             Vacante
           </div>
         )}
@@ -478,7 +505,7 @@ export const Podium: React.FC<PodiumProps> = ({
           key={`pillar-1`}
           participant={first}
           rank={1}
-          heightClass={isCeremonyMode ? 'h-36 sm:h-44 md:h-52' : 'h-48 sm:h-60 md:h-70'}
+          heightClass={get_heightClass(1)}
           pillarGradient="bg-gradient-to-b from-[#99a6fb] via-[#8594f8] to-[#7182f3]"
           topCapGradient="bg-[#c7d2fe]"
           sideShadow=""
@@ -497,7 +524,7 @@ export const Podium: React.FC<PodiumProps> = ({
             key={`pillar-3`}
             participant={third}
             rank={3}
-            heightClass={isCeremonyMode ? 'h-22 sm:h-28 md:h-32' : 'h-26 sm:h-34 md:h-40'}
+            heightClass={get_heightClass(3)}
             pillarGradient="bg-gradient-to-b from-[#8593f5] via-[#7382ee] to-[#6372e8]"
             topCapGradient="bg-[#93a1f8]"
             sideShadow="shadow-[0_10px_20px_rgba(79,70,229,0.22)]"
@@ -507,7 +534,7 @@ export const Podium: React.FC<PodiumProps> = ({
             isHighlight={justRevealedRank === 3}
           />
         ) : (
-          <div className="w-24 sm:w-32 md:w-40 h-22 opacity-25 flex items-center justify-center text-xs text-white">
+          <div className={`w-24 sm:w-32 md:w-40 ${isSplitMode ? 'h-40 sm:h-48 md:h-64' : 'h-22'} opacity-25 flex items-center justify-center text-xs text-white`}>
             Vacante
           </div>
         )}
