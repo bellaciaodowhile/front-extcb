@@ -826,7 +826,7 @@ export const FooterControlsDrawer: React.FC<FooterControlsDrawerProps> = ({
                       href="mailto:codezardi@example.com"
                       className="text-xs text-white font-medium flex-1 truncate"
                     >
-                      codezardi@example.com
+                      codezardi@gmail.com
                     </a>
                   </div>
                   <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-slate-800 w-full">
@@ -834,12 +834,12 @@ export const FooterControlsDrawer: React.FC<FooterControlsDrawerProps> = ({
                       <span className="text-sm">📱</span>
                     </div>
                     <a
-                      href="https://wa.me/584120000000"
+                      href="https://wa.me/584122974011"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-white font-medium flex-1 truncate"
                     >
-                      +58 412-000-0000
+                      +58 412-297-4011
                     </a>
                   </div>
                 </motion.div>

@@ -73,12 +73,12 @@ export const WaitingForParticipantsView: React.FC<WaitingForParticipantsViewProp
                     </div>
                     <div className="text-left flex-1">
                       <p className="text-xs text-slate-400 uppercase font-bold">Email</p>
-                      <p className="text-sm sm:text-base text-white font-medium">codezardi@example.com</p>
+                      <p className="text-sm sm:text-base text-white font-medium">codezardi@gmail.com</p>
                     </div>
                   </a>
 
                   <a
-                    href="https://wa.me/584120000000"
+                    href="https://wa.me/584122974011"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700 hover:border-green-500/50 hover:bg-slate-800 transition-all"
@@ -88,13 +88,13 @@ export const WaitingForParticipantsView: React.FC<WaitingForParticipantsViewProp
                     </div>
                     <div className="text-left flex-1">
                       <p className="text-xs text-slate-400 uppercase font-bold">WhatsApp</p>
-                      <p className="text-sm sm:text-base text-white font-medium">+58 412-000-0000</p>
+                      <p className="text-sm sm:text-base text-white font-medium">+58 412-297-4011</p>
                     </div>
                   </a>
                 </div>
 
                 <p className="mt-6 text-xs text-slate-500">
-                  ¿Necesitas un sistema a medida? Escríbeanos.
+                  ¿Necesitas un sistema a medida? Escríbenos.
                 </p>
               </div>
             </div>
